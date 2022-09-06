@@ -3,13 +3,13 @@ import React, {useState} from 'react'
 import { AsyncPaginate } from 'react-select-async-paginate';
 import {GEO_API_URL, geoApiOptions} from '../util/api';
 
-const Search = ({onSearchChange}) => {
+export default function Search(props){
   const [search,setSearch] = useState(null);
-  const handleOnChange = (searchData) => {
+  function handleOnChange(searchData){
     setSearch(searchData);
-    onSearchChange(searchData);
+    props.onSearchChange(searchData);
   }
-  const loadOptions = (inputValue) => {
+  function loadOptions(inputValue){
     console.log(GEO_API_URL);
     return fetch(`${GEO_API_URL}/cities?minPopulation=1000000&namePrefix=${inputValue}`, geoApiOptions)
     .then(response => response.json())
@@ -24,16 +24,17 @@ const Search = ({onSearchChange}) => {
       }
     })
     .catch(err => console.error(err));
+
   }
   return (
-    <AsyncPaginate 
-      placeholder="Search for city"
-      debounceTimeout={1000}
-      value={search}
-      onChange={handleOnChange}
-      loadOptions={loadOptions}
-    />
+    <div className='search-bar'>
+      <AsyncPaginate 
+        placeholder="Search for city"
+        debounceTimeout={300}
+        value={search}
+        onChange={handleOnChange}
+        loadOptions={loadOptions}
+      />
+    </div>
   )
 }
-
-export default Search;
