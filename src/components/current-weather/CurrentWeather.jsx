@@ -19,17 +19,19 @@ export default function CurrentWeather(props) {
   console.log(wtf);
 
   function convertTemperature(temp){
-    let convertedTemp = (temp - 273.15) * (9/5) + 32
+    let convertedTemp = (temp * 9/5) + 32
     return Math.round(convertedTemp);
   }
   return (
     <div className="weather-wrapper">
       <div className="top">
+        <div className="">
+          <img src={`icons/${props.data.weather[0].icon}.png`} alt="weather" className="weather-icon"/>
+        </div>
         <div>
           <p className="city">{props.data.city.name}</p>
           <p className="weather-desc">{props.data.weather[0].description}</p>
         </div>
-        <img src={`icons/${props.data.weather[0].icon}.png`} alt="weather" className="weather-icon"/>
       </div>
       <div className="bottom">
         <p className="temperature">{convertTemperature(props.data.main.temp)}°F</p>

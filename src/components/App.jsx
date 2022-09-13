@@ -8,11 +8,13 @@ import { WEATHER_API_KEY, WEATHER_API_URL, HOURLY_WEATHER_API_URL, HOURLY_WEATHE
 export default function App() {
     const [currentWeather, setCurrentWeather] = useState(null);
     const [forecast, setForecast] = useState(null);
-    const handleOnSearchChange = (searchData) =>{
-        console.log(searchData);
+    function handleOnSearchChange(searchData){
+        const cityStateCountry = searchData.label
+        // console.log(searchData);
         const[lat,lon] =searchData.value.split(" ");
-        const currentWeatherFetch = fetch(`${WEATHER_API_URL}/weather?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}`)
-        const forecastFetch = fetch(`${WEATHER_API_URL}/forecast?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}`)
+        const currentWeatherFetch = fetch(`${WEATHER_API_URL}/weather?q=${cityStateCountry}&appid=${WEATHER_API_KEY}&units=metric`)
+        const forecastFetch = fetch(`${WEATHER_API_URL}/forecast?q=${cityStateCountry}&appid=${WEATHER_API_KEY}&units=metric`)
+        // const 
         Promise.all([currentWeatherFetch, forecastFetch])
             .then(async(response)=>{
                 const weatherResponse = await response[0].json();
@@ -24,14 +26,13 @@ export default function App() {
             .catch(err => console.log(err)) ;
     }
     console.log(currentWeather);
-    console.log(forecast);
+    // console.log(forecast);
   return (
     <div className='app'>
         <div className='domain-wrapper'>
-            <h1 className='header'>Weathers</h1>
             <Search onSearchChange={handleOnSearchChange}/>
             {currentWeather && <CurrentWeather data={currentWeather}/>}
-            {forecast && <Forecast />}
+            {forecast && <Forecast data={forecast}/>}
         </div>
     </div>
   )
